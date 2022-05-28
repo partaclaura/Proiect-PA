@@ -37,4 +37,24 @@ public class UserDAO {
         }
         return id;
     }
+
+    public boolean findUser(String username, String password)
+    {
+        Connection connection = DatabaseConnection.getConnection();
+        int id = 0;
+        try(Statement stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(
+                    "SELECT id FROM users WHERE username='" + username + "' and password='" + password + "'"
+            )){
+            while (resultSet.next())
+            {
+                id = Integer.parseInt(resultSet.getString(1));
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        if(id == 0) return false;
+        return true;
+    }
 }

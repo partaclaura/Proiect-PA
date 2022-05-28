@@ -18,11 +18,13 @@ public class FormPage{
     private ClientConnection con;
     private Stage stage;
     private Text pageTitle;
+    private GridPane gridPane;
 
     public FormPage(String type, Stage stage, ClientConnection con) {
         this.con = con;
         this.stage = stage;
         pageTitle = new Text();
+        this.gridPane = new GridPane();
         this.pageTitle.setText(type);
         FormSetup();
     }
@@ -30,7 +32,6 @@ public class FormPage{
     public Scene FormSetup()
     {
         //setting form grid
-        GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -62,11 +63,31 @@ public class FormPage{
 
         Scene scene = new Scene(gridPane, 500, 500);
         this.stage.setScene(scene);
-        button.setOnAction(t -> response.setText(new ServerCom(this.con).sendLoginRequest(
-                userNameField.getText(), passwordField.getText()
-        )));
+        button.setOnAction(t -> attempt(response, userNameField.getText(), passwordField.getText()));
+
         return scene;
 
+    }
+
+    private void attempt(Text text, String username, String password)
+    {
+        text.setText( submitButton(username, password));
+        if(text.getText().contains("successful"))
+        {
+            Button next = new Button("Continue");
+            gridPane.add(next, 1, 8);
+            next.setOnAction(t -> new MainPage(this.stage, username));
+        }
+
+    }
+
+    private String submitButton(String username, String password)
+    {
+        if(this.pageTitle.getText().equals("Login"))
+            return new ServerCom(this.con).sendLoginRequest(username, password);
+        if(this.pageTitle.getText().equals("Signup"))
+            return new ServerCom(this.con).sendSignupRequest(username, password);
+        return "";
     }
 
 

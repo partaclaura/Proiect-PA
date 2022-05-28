@@ -23,4 +23,18 @@ public class ServerCom {
         }
         return response;
     }
+
+    public String sendSignupRequest(String username, String password)
+    {
+        String response = "";
+        try {
+            this.con.getDataOutputStream().writeUTF("signup " + username + " " + password);
+            response = this.con.getDataInputStream().readUTF();
+
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return response;
+    }
 }
