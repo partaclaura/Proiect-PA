@@ -37,8 +37,13 @@ public class FormPage{
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
+        Button back = new Button("Back");
+        back.setOnAction(t -> new TitlePage(this.stage, this.con));
         //setting labels and fields
-        gridPane.add(this.pageTitle, 0, 0, 2, 1);
+        HBox controls = new HBox(5);
+        controls.getChildren().add(back);
+        controls.getChildren().add(this.pageTitle);
+        gridPane.add(controls, 0, 0, 2, 1);
 
         Label userName = new Label("username: ");
         gridPane.add(userName, 0, 1);
@@ -76,7 +81,7 @@ public class FormPage{
         {
             Button next = new Button("Continue");
             gridPane.add(next, 1, 8);
-            next.setOnAction(t -> new MainPage(this.stage, username));
+            next.setOnAction(t -> new MainPage(this.con, this.stage, username));
         }
 
     }

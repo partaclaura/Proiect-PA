@@ -3,6 +3,9 @@ package Connection;
 import Connection.ClientConnection;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ServerCom {
     private ClientConnection con;
@@ -15,7 +18,11 @@ public class ServerCom {
         String response = "";
         try {
             this.con.getDataOutputStream().writeUTF("login " + username + " " + password);
+            System.out.println("Sending");
             response = this.con.getDataInputStream().readUTF();
+            if(response.equals("Invalid command."))
+                response = this.con.getDataInputStream().readUTF();
+            System.out.println("Got " + response);
 
         }catch (IOException e)
         {
@@ -29,8 +36,48 @@ public class ServerCom {
         String response = "";
         try {
             this.con.getDataOutputStream().writeUTF("signup " + username + " " + password);
+            System.out.println("Sending");
             response = this.con.getDataInputStream().readUTF();
+            System.out.println("Got " + response);
 
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public List<String> getUserFriends(String username)
+    {
+        List<String> friends = new ArrayList<>();
+        try{
+            String response = "";
+            this.con.getDataOutputStream().writeUTF("getFriends " + username);
+            System.out.println("Sending");
+            response = this.con.getDataInputStream().readUTF();
+            if(response.equals("Invalid command."))
+                response = this.con.getDataInputStream().readUTF();
+            System.out.println("Got " + response);
+            String[] f = response.split(",");
+            friends.addAll(Arrays.asList(f));
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return friends;
+    }
+
+    public String addFriendRequest(String friend1, String friend2)
+    {
+        String response = "";
+        try {
+            this.con.getDataOutputStream().writeUTF("friend " + friend1 + " " + friend2);
+            System.out.println("Sending");
+            this.con.getDataOutputStream().flush();
+            response = this.con.getDataInputStream().readUTF();
+            while(!(response.equals("Friendship successful") || response.equals("User does not exist/ already friends")))
+                response = this.con.getDataInputStream().readUTF();
+            System.out.println("Got " + response);
         }catch (IOException e)
         {
             e.printStackTrace();

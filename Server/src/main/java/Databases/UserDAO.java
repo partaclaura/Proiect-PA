@@ -38,6 +38,25 @@ public class UserDAO {
         return id;
     }
 
+    public String getUsernameById(int id)
+    {
+        Connection connection = DatabaseConnection.getConnection();
+        String username = "";
+        try(Statement stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(
+                    "SELECT username FROM users WHERE id=" + id
+            )){
+            while (resultSet.next())
+            {
+                username = resultSet.getString(1);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return username;
+    }
+
     public boolean findUser(String username, String password)
     {
         Connection connection = DatabaseConnection.getConnection();
