@@ -19,17 +19,25 @@ public class FormPage{
     private Stage stage;
     private Text pageTitle;
     private GridPane gridPane;
+    String buttonStyle = "-fx-font: 20px Verdana;" +
+            "-fx-text-fill: #FF565A;" +
+            "-fx-border-color: #FF565A;" +
+            "-fx-background-color: #3f3f3f";
+    String textStyle = "-fx-font: 20px Verdana;" +
+            "-fx-text-fill: #008488";
 
     public FormPage(String type, Stage stage, ClientConnection con) {
         this.con = con;
         this.stage = stage;
         pageTitle = new Text();
         this.gridPane = new GridPane();
+        gridPane.setStyle("-fx-background-color: #4B4B4B");
         this.pageTitle.setText(type);
+        pageTitle.setStyle(textStyle);
         FormSetup();
     }
 
-    public Scene FormSetup()
+    public void FormSetup()
     {
         //setting form grid
         gridPane.setAlignment(Pos.CENTER);
@@ -37,7 +45,8 @@ public class FormPage{
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
-        Button back = new Button("Back");
+        Button back = new Button("BACK");
+        back.setStyle(buttonStyle);
         back.setOnAction(t -> new TitlePage(this.stage, this.con));
         //setting labels and fields
         HBox controls = new HBox(5);
@@ -47,18 +56,21 @@ public class FormPage{
 
         Label userName = new Label("username: ");
         gridPane.add(userName, 0, 1);
+        userName.setStyle(textStyle);
 
         TextField userNameField = new TextField();
         gridPane.add(userNameField, 1, 1);
 
         Label password = new Label("password: ");
         gridPane.add(password, 0, 2);
+        password.setStyle(textStyle);
 
         PasswordField passwordField = new PasswordField();
         gridPane.add(passwordField, 1, 2);
 
         //button
         Button button = new Button(this.pageTitle.getText());
+        button.setStyle(buttonStyle);
         HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.BOTTOM_RIGHT);
         hBox.getChildren().add(button);
@@ -70,16 +82,16 @@ public class FormPage{
         this.stage.setScene(scene);
         button.setOnAction(t -> attempt(response, userNameField.getText(), passwordField.getText()));
 
-        return scene;
-
     }
 
     private void attempt(Text text, String username, String password)
     {
         text.setText( submitButton(username, password));
+        text.setStyle(textStyle);
         if(text.getText().contains("successful"))
         {
             Button next = new Button("Continue");
+            next.setStyle(buttonStyle);
             gridPane.add(next, 1, 8);
             next.setOnAction(t -> new MainPage(this.con, this.stage, username));
         }

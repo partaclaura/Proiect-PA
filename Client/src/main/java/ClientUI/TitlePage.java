@@ -15,8 +15,8 @@ public class TitlePage {
     ClientConnection con;
     Stage stage;
     Text pageTitle = new Text("PROIECT PA");
-    Button logIn_button = new Button("Login");
-    Button signup_button = new Button("Signup");
+    Button logIn_button = new Button("LOGIN");
+    Button signup_button = new Button("SIGNUP");
     VBox vBox = new VBox();
     HBox hBox = new HBox();
 
@@ -26,13 +26,14 @@ public class TitlePage {
         this.con = con;
         //title
         pageTitle.setStyle("-fx-font: 50px Verdana;" +
-                "-fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #f15f4e 0%, #f4d550 50%);" +
+                "-fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008488 0%, #FF565A 50%);" +
                 "-fx-stroke: #231f20;" +
                 "-fx-stroke-width: 1;");
         //buttons
         String buttonStyle = "-fx-font: 30px Verdana;" +
-                "-fx-border-color: #426c95;" +
-                "-fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #eae5c9 0%, #6cc6cb 50%);;";
+                "-fx-text-fill: #FF565A;" +
+                "-fx-border-color: #FF565A;" +
+                "-fx-background-color: #3f3f3f";
         logIn_button.setStyle(buttonStyle);
         signup_button.setStyle(buttonStyle);
         logIn_button.setMinWidth(300);
@@ -43,7 +44,7 @@ public class TitlePage {
         //hbox
         hBox.getChildren().add(pageTitle);
         hBox.setAlignment(Pos.CENTER);
-        hBox.setStyle("-fx-background-color: white;");
+        hBox.setStyle("-fx-background-color: #4B4B4B;");
         //vbox
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(new Insets(10, 50, 50, 50));
@@ -52,7 +53,7 @@ public class TitlePage {
         borderPane.setTop(hBox);
         vBox.getChildren().add(logIn_button);
         vBox.getChildren().add(signup_button);
-        vBox.setStyle("-fx-background-color: white");
+        vBox.setStyle("-fx-background-color: #4B4B4B");
         borderPane.setCenter(vBox);
         this.stage.setScene(new Scene(borderPane, 500, 500));
         this.stage.show();

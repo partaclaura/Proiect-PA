@@ -1,7 +1,5 @@
 package Connection;
 
-import Connection.ClientConnection;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,8 +112,6 @@ public class ServerCom {
             System.out.println("Sending " + username);
             this.con.getDataOutputStream().flush();
             response = this.con.getDataInputStream().readUTF();
-            while(!(response.contains(";")))
-                response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);
         }catch (IOException e)
         {
