@@ -5,11 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>ProiectPA</artifactId>
+    <artifactId>Proiect_PA2</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>Client</module>
+        <module>Server</module>
+        <module>MessagesAPI</module>
     </modules>
 
     <properties>

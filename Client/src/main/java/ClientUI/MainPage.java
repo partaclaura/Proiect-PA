@@ -71,6 +71,11 @@ public class MainPage {
         gridPane.add(friendList, 0, 2);
         addFriendButton.setOnAction(t -> addFriendAction(addFriendButton));
 
+        Button messages = new Button("Messages");
+        gridPane.add(messages, 0, 3);
+        messages.setOnAction(t-> new MessagesPage(this.con, this.stage, this.username));
+
+
 
         Scene scene = new Scene(gridPane, 500, 500);
         this.stage.setScene(scene);
@@ -97,13 +102,13 @@ public class MainPage {
         fActions.getChildren().add(response);
         button.setText("Add");
 
-        button.setOnAction(t-> {response.setText(new ServerCom(con).addFriendRequest(this.username, friendUsername.getText()));
-            try {
-                wait(100);
-            }catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-        MainPage mp = new MainPage(this.con, this.stage, this.username);});
+        button.setOnAction(t-> reload(response, friendUsername));
     }
+
+    private void reload(Text response, TextField friendUsername)
+    {
+        response.setText(new ServerCom(con).addFriendRequest(this.username, friendUsername.getText()));
+        MainPage mp = new MainPage(this.con, this.stage, this.username);
+    }
+
 }

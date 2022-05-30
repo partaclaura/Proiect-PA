@@ -86,4 +86,41 @@ public class ServerCom {
         }
         return response;
     }
+
+    public String sendMessage(String from, String to, String message)
+    {
+        String tosend = from + " " + to + " " + message;
+        String response = "";
+        try {
+            this.con.getDataOutputStream().writeUTF("send "+tosend);
+            System.out.println("Sending " + tosend);
+            this.con.getDataOutputStream().flush();
+            response = this.con.getDataInputStream().readUTF();
+            while(!(response.equals("Message sent")))
+                response = this.con.getDataInputStream().readUTF();
+            System.out.println("Got " + response);
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public String getMessages(String username)
+    {
+        String response = "";
+        try {
+            this.con.getDataOutputStream().writeUTF("getmess "+username);
+            System.out.println("Sending " + username);
+            this.con.getDataOutputStream().flush();
+            response = this.con.getDataInputStream().readUTF();
+            while(!(response.contains(";")))
+                response = this.con.getDataInputStream().readUTF();
+            System.out.println("Got " + response);
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return response;
+    }
 }
