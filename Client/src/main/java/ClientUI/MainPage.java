@@ -49,7 +49,7 @@ public class MainPage {
         top.setPadding(new Insets(10, 10, 10, 10));
         top.getChildren().add(back);
         top.getChildren().add(title);
-        top.setStyle("-fx-background-color: red");
+        //top.setStyle("-fx-background-color: red");
         gridPane.add(top, 0, 1);
 
         GridPane friendList = new GridPane();
@@ -57,6 +57,7 @@ public class MainPage {
         fActions.setMinWidth(250);
         fActions.setMaxWidth(250);
         Text friendListLabel = new Text("Friend list");
+        friendListLabel.setStyle("-fx-font: 10px Verdana");
         fActions.getChildren().add(friendListLabel);
         Button addFriendButton = new Button("Add friend");
         fActions.getChildren().add(addFriendButton);
