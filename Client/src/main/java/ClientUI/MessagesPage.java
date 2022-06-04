@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,11 +19,13 @@ public class MessagesPage {
     String username;
 
     String buttonStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #FF565A;" +
-            "-fx-border-color: #FF565A;" +
-            "-fx-background-color: #3f3f3f";
+            "-fx-text-fill: #7161ef;" +
+            "-fx-border-color: #7161ef;" +
+            "-fx-background-color: #11151c";
     String textStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #008488";
+            "-fx-text-fill: #efd9ce";
+    String fieldStyle = "-fx-background-color: #212d40;" +
+            "-fx-text-fill: #efd9ce";
 
     public MessagesPage(ClientConnection con, Stage stage, String username)
     {
@@ -39,17 +42,19 @@ public class MessagesPage {
         back.setStyle(buttonStyle);
         back.setOnAction(t -> new MainPage(this.con, this.stage, this.username));
 
-        Text from_text = new Text("From: " + this.username);
+        Label from_text = new Label("From: " + this.username);
         from_text.setStyle(textStyle);
-        Text to_text = new Text("To: ");
+        Label to_text = new Label("To: ");
         to_text.setStyle(textStyle);
         TextField to_field = new TextField();
-        Text mess_text = new Text("Message");
+        to_field.setStyle(fieldStyle);
+        Label mess_text = new Label("Message");
         mess_text.setStyle(textStyle);
         TextField mess_field = new TextField();
+        mess_field.setStyle(fieldStyle);
 
         GridPane gridPane = new GridPane();
-        gridPane.setStyle("-fx-background-color: #4B4B4B;");
+        gridPane.setStyle("-fx-background-color: #11151c;");
         gridPane.add(back, 0, 0);
         gridPane.add(from_text, 0, 1);
         sendContainer.getChildren().add(to_text);

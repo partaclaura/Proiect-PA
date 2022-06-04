@@ -26,14 +26,14 @@ public class TitlePage {
         this.con = con;
         //title
         pageTitle.setStyle("-fx-font: 50px Verdana;" +
-                "-fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008488 0%, #FF565A 50%);" +
+                "-fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #7161ef 0%, #dec0f1 50%);" +
                 "-fx-stroke: #231f20;" +
                 "-fx-stroke-width: 1;");
         //buttons
         String buttonStyle = "-fx-font: 30px Verdana;" +
-                "-fx-text-fill: #FF565A;" +
-                "-fx-border-color: #FF565A;" +
-                "-fx-background-color: #3f3f3f";
+                "-fx-text-fill: #7161ef;" +
+                "-fx-border-color: #7161ef;" +
+                "-fx-background-color: #11151c";
         logIn_button.setStyle(buttonStyle);
         signup_button.setStyle(buttonStyle);
         logIn_button.setMinWidth(300);
@@ -44,7 +44,7 @@ public class TitlePage {
         //hbox
         hBox.getChildren().add(pageTitle);
         hBox.setAlignment(Pos.CENTER);
-        hBox.setStyle("-fx-background-color: #4B4B4B;");
+        hBox.setStyle("-fx-background-color: #11151c;");
         //vbox
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(new Insets(10, 50, 50, 50));
@@ -53,7 +53,7 @@ public class TitlePage {
         borderPane.setTop(hBox);
         vBox.getChildren().add(logIn_button);
         vBox.getChildren().add(signup_button);
-        vBox.setStyle("-fx-background-color: #4B4B4B");
+        vBox.setStyle("-fx-background-color: #11151c");
         borderPane.setCenter(vBox);
         this.stage.setScene(new Scene(borderPane, 500, 500));
         this.stage.show();

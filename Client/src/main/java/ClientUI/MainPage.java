@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -25,10 +26,9 @@ public class MainPage {
     private String username;
 
     String buttonStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #FF565A;" +
-            "-fx-border-color: #FF565A;" +
-            "-fx-background-color: #3f3f3f";
-    String textStyle = "-fx-font: 20px Verdana;";
+            "-fx-text-fill: #7161ef;" +
+            "-fx-border-color: #7161ef;" +
+            "-fx-background-color: #11151c";
 
     public MainPage(ClientConnection con, Stage stage, String username)
     {
@@ -36,13 +36,13 @@ public class MainPage {
         this.stage = stage;
         this.username = username;
         this.gridPane = new GridPane();
-        gridPane.setStyle("-fx-background-color: #4B4B4B");
+        gridPane.setStyle("-fx-background-color: #11151c");
         pageSetup();
     }
 
     private void pageSetup()
     {
-        //gridPane.setAlignment(Pos.CENTER);
+        gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
@@ -50,39 +50,45 @@ public class MainPage {
         Button back = new Button("Back");
         back.setStyle(buttonStyle);
         back.setOnAction(t -> new TitlePage(this.stage, this.con));
-        Text title = new Text(this.username);
+        Label title = new Label(this.username);
         title.setStyle("-fx-font: 30px Verdana;" +
-                "-fx-background-color: #008488");
+                "-fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #7161ef 0%, #dec0f1 50%);");
         HBox top = new HBox(5);
+        top.setSpacing(10);
         top.setMinWidth(400);
         top.setMaxWidth(400);
         top.setPadding(new Insets(10, 10, 10, 10));
         top.getChildren().add(back);
         top.getChildren().add(title);
-        //top.setStyle("-fx-background-color: red");
         gridPane.add(top, 0, 1);
 
         GridPane friendList = new GridPane();
         fActions = new HBox(5);
         fActions.setMinWidth(250);
-        //fActions.setMaxWidth(250);
+        fActions.setSpacing(10);
+        fActions.setMaxWidth(350);
 
-        Text friendListLabel = new Text("Friend list");
-        friendListLabel.setStyle(textStyle);
+        Label friendListLabel = new Label("Friend list");
+        friendListLabel.setStyle("-fx-text-fill: #7161ef;" +
+                "-fx-font: 20px Verdana;");
         fActions.getChildren().add(friendListLabel);
 
         Button addFriendButton = new Button("Add friend");
-        addFriendButton.setStyle("-fx-text-fill: #FF565A;" +
-                "-fx-border-color: #FF565A;" +
-                "-fx-background-color: #3f3f3f");
+        addFriendButton.setStyle("-fx-text-fill: #7161ef;" +
+                "-fx-border-color: #7161ef;" +
+                "-fx-background-color: #11151c");
         fActions.getChildren().add(addFriendButton);
 
         this.friendsContainer = new VBox(5);
-        friendsContainer.setStyle("-fx-background-color: #3f3f3f");
+        friendsContainer.setSpacing(10);
+        friendsContainer.setMinWidth(350);
+        friendsContainer.setStyle("-fx-background-color: #212d40");
+        friendsContainer.setPadding(new Insets(10, 10, 10, 10));
         friendList.add(fActions, 0, 1);
-        for(Text text : showFriends()) {
+        for(Label text : showFriends()) {
             friendsContainer.getChildren().add(text);
-            text.setStyle(textStyle);
+            text.setStyle("-fx-text-fill: #efd9ce;" +
+                    "-fx-font: 20px Verdana;");
         }
         friendList.add(friendsContainer, 0, 2);
         gridPane.add(friendList, 0, 2);
@@ -99,14 +105,14 @@ public class MainPage {
         this.stage.setScene(scene);
     }
 
-    private List<Text> showFriends()
+    private List<Label> showFriends()
     {
-        List<Text> showfriends = new ArrayList<>();
+        List<Label> showfriends = new ArrayList<>();
         List<String> friendsList = new ServerCom(con).getUserFriends(username);
         for(String f : friendsList)
         {
-            Text friend = new Text(f);
-            friend.setStyle(textStyle);
+            Label friend = new Label(f);
+            friend.setStyle("-fx-text-fill: #efd9ce");
             showfriends.add(friend);
             System.out.println(friend.getText());
         }
@@ -115,19 +121,23 @@ public class MainPage {
 
     private void addFriendAction(Button button)
     {
-        Text response = new Text("");
+        Label response = new Label("");
+        response.setStyle("-fx-text-fill: #efd9ce;" +
+                "-fx-font: 20px Verdana;");
         TextField friendUsername = new TextField("username");
+        friendUsername.setStyle("-fx-background-color: #212d40;" +
+                "-fx-text-fill: #efd9ce");
         fActions.getChildren().add(friendUsername);
         fActions.getChildren().add(response);
         button.setText("Add");
-        button.setStyle("-fx-text-fill: #FF565A;" +
-                "-fx-border-color: #FF565A;" +
-                "-fx-background-color: #3f3f3f");
+        button.setStyle("-fx-text-fill: #7161ef;" +
+                "-fx-border-color: #7161ef;" +
+                "-fx-background-color: #11151c");
 
         button.setOnAction(t-> reload(response, friendUsername));
     }
 
-    private void reload(Text response, TextField friendUsername)
+    private void reload(Label response, TextField friendUsername)
     {
         response.setText(new ServerCom(con).addFriendRequest(this.username, friendUsername.getText()));
         MainPage mp = new MainPage(this.con, this.stage, this.username);

@@ -17,23 +17,24 @@ import javafx.stage.Stage;
 public class FormPage{
     private ClientConnection con;
     private Stage stage;
-    private Text pageTitle;
+    private Label pageTitle;
     private GridPane gridPane;
     String buttonStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #FF565A;" +
-            "-fx-border-color: #FF565A;" +
-            "-fx-background-color: #3f3f3f";
+            "-fx-text-fill: #7161ef;" +
+            "-fx-border-color: #7161ef;" +
+            "-fx-background-color: #11151c";
     String textStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #008488";
+            "-fx-text-fill: #efd9ce";
 
     public FormPage(String type, Stage stage, ClientConnection con) {
         this.con = con;
         this.stage = stage;
-        pageTitle = new Text();
+        pageTitle = new Label();
         this.gridPane = new GridPane();
-        gridPane.setStyle("-fx-background-color: #4B4B4B");
+        gridPane.setStyle("-fx-background-color: #11151c");
         this.pageTitle.setText(type);
-        pageTitle.setStyle(textStyle);
+        pageTitle.setStyle("-fx-font: 35px Verdana;" +
+                "-fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #7161ef 0%, #dec0f1 50%);");
         FormSetup();
     }
 
@@ -60,6 +61,8 @@ public class FormPage{
 
         TextField userNameField = new TextField();
         gridPane.add(userNameField, 1, 1);
+        userNameField.setStyle("-fx-background-color: #212d40;" +
+                "-fx-text-fill: #efd9ce");
 
         Label password = new Label("password: ");
         gridPane.add(password, 0, 2);
@@ -67,6 +70,9 @@ public class FormPage{
 
         PasswordField passwordField = new PasswordField();
         gridPane.add(passwordField, 1, 2);
+        passwordField.setStyle("-fx-background-color: #212d40;" +
+                "-fx-text-fill: #efd9ce");
+
 
         //button
         Button button = new Button(this.pageTitle.getText());

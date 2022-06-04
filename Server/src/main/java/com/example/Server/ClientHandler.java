@@ -79,7 +79,7 @@ public class ClientHandler extends Thread{
             switch (command) {
                 case "login":
                     System.out.println("Client wants to login");
-                    if (user.findUser(p[0], p[1]))//searching for user in the db
+                    if (p.length > 0 && user.findUser(p[0], p[1]))//searching for user in the db
                     {
                         dataOutputStream.writeUTF("Login successful.");
                         System.out.println("Sending");
