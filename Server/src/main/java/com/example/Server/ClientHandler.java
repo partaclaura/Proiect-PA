@@ -34,8 +34,8 @@ public class ClientHandler extends Thread{
     {
         while(!terminated) {
             String request = "";
-            String response;
-            while (true && !terminated) {
+            //String response;
+            while (!terminated) {
                 try {
                     if (serverSocket.isClosed())
                         break;
@@ -79,7 +79,7 @@ public class ClientHandler extends Thread{
             switch (command) {
                 case "login":
                     System.out.println("Client wants to login");
-                    if (p.length > 0 && user.findUser(p[0], p[1]))//searching for user in the db
+                    if (p.length == 2 && user.findUser(p[0], p[1]))//searching for user in the db
                     {
                         dataOutputStream.writeUTF("Login successful.");
                         System.out.println("Sending");
@@ -92,9 +92,9 @@ public class ClientHandler extends Thread{
                     break;
                 case "signup":
                     System.out.println("Client wants to signup");
-                    if(p.length > 0 && user.getIdByUsername(p[0]) != 0)
+                    if(p.length == 0 || user.getIdByUsername(p[0]) != 0)
                     {
-                        dataOutputStream.writeUTF("Username already exists.");
+                        dataOutputStream.writeUTF("Username already exists/Not enough data.");
                         System.out.println("Sending");
                     }
                     else {
@@ -117,45 +117,56 @@ public class ClientHandler extends Thread{
                     break;
                 case "friend":
                     System.out.println("Client " + p[0] + " wants to friend " + p[1]);
-                    if(user.getIdByUsername(p[1]) != 0 &&
-                            !friendship.exists(user.getIdByUsername(p[0]), user.getIdByUsername(p[1])))
-                    {
-                        System.out.println(p[1] + " exists.");
-                        friendship.create(user.getIdByUsername(p[0]), user.getIdByUsername(p[1]));
-                        try {
-                            DatabaseConnection.getConnection().commit();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                    if(p.length == 2) {
+                        if (user.getIdByUsername(p[1]) != 0 &&
+                                !friendship.exists(user.getIdByUsername(p[0]), user.getIdByUsername(p[1]))) {
+                            System.out.println(p[1] + " exists.");
+                            friendship.create(user.getIdByUsername(p[0]), user.getIdByUsername(p[1]));
+                            try {
+                                DatabaseConnection.getConnection().commit();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            dataOutputStream.writeUTF("Friendship successful");
+                            System.out.println("Sending");
                         }
-                        dataOutputStream.writeUTF("Friendship successful");
-                        System.out.println("Sending");
+                        else dataOutputStream.writeUTF("User does not exist/ already friends");
                     }
                     else {
-                        dataOutputStream.writeUTF("User does not exist/ already friends");
+                        dataOutputStream.writeUTF("Not enough data.");
                         System.out.println("Sending");
                     }
                     break;
                 case "getFriends":
                     System.out.println("Client wants to get friends.");
-                    List<Integer> ids = friendship.getAllFriends(user.getIdByUsername(p[0]));
-                    List<String> usernames = new ArrayList<>();
-                    for(Integer fid : ids)
-                        usernames.add(user.getUsernameById(fid));
-                    String sendFriends = "";
-                    for(String friends : usernames)
-                        sendFriends = sendFriends.concat(friends + ",");
-                    dataOutputStream.writeUTF(sendFriends);
+                    if(p.length == 1) {
+                        List<Integer> ids = friendship.getAllFriends(user.getIdByUsername(p[0]));
+                        List<String> usernames = new ArrayList<>();
+                        for (Integer fid : ids)
+                            usernames.add(user.getUsernameById(fid));
+                        String sendFriends = "";
+                        for (String friends : usernames)
+                            sendFriends = sendFriends.concat(friends + ",");
+                        dataOutputStream.writeUTF(sendFriends);
+                    }
+                    else dataOutputStream.writeUTF("error");
                     break;
                 case "send":
                     System.out.println("From " + p[0] + " to " + p[1] + ": " + p[2]);
-                    String tosend = p[0] + "," + p[1] + "," + p[2];
-                    APIConnection.PostMessage(tosend);
-                    dataOutputStream.writeUTF("Message sent");
+                    if(p.length == 3) {
+                        String tosend = p[0] + "," + p[1] + "," + p[2];
+                        APIConnection.PostMessage(tosend);
+                        dataOutputStream.writeUTF("Message sent");
+                    }
+                    else dataOutputStream.writeUTF("Can't send message.");
                     break;
                 case "getmess":
                     System.out.println("Client wants to get messages");
                     System.out.println("Get messages for " + p[0]);
-                    dataOutputStream.writeUTF(APIConnection.GetMessage(p[0]));
+                    if(p.length == 1) {
+                        dataOutputStream.writeUTF(APIConnection.GetMessage(p[0]));
+                    }
+                    else dataOutputStream.writeUTF("Error");
                     break;
                 default:
                     System.out.println("Invalid command.");

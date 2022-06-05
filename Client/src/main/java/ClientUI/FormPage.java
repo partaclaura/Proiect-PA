@@ -55,34 +55,41 @@ public class FormPage{
         controls.getChildren().add(this.pageTitle);
         gridPane.add(controls, 0, 0, 2, 1);
 
+        HBox usernameContainer = new HBox(5);
         Label userName = new Label("username: ");
         gridPane.add(userName, 0, 1);
         userName.setStyle(textStyle);
-
+        usernameContainer.getChildren().add(userName);
         TextField userNameField = new TextField();
         gridPane.add(userNameField, 1, 1);
         userNameField.setStyle("-fx-background-color: #212d40;" +
                 "-fx-text-fill: #efd9ce");
+        usernameContainer.getChildren().add(userNameField);
+        gridPane.add(usernameContainer, 0, 1);
 
+        HBox passwordContainer = new HBox(5);
         Label password = new Label("password: ");
         gridPane.add(password, 0, 2);
         password.setStyle(textStyle);
-
         PasswordField passwordField = new PasswordField();
         gridPane.add(passwordField, 1, 2);
         passwordField.setStyle("-fx-background-color: #212d40;" +
                 "-fx-text-fill: #efd9ce");
+        passwordContainer.getChildren().add(password);
+        passwordContainer.getChildren().add(passwordField);
+        gridPane.add(passwordContainer, 0, 2);
 
 
         //button
         Button button = new Button(this.pageTitle.getText());
         button.setStyle(buttonStyle);
         HBox hBox = new HBox(10);
-        hBox.setAlignment(Pos.BOTTOM_RIGHT);
+        hBox.setAlignment(Pos.BOTTOM_LEFT);
         hBox.getChildren().add(button);
-        gridPane.add(hBox, 1, 4);
-        Text response = new Text();
-        gridPane.add(response, 1, 6);
+        gridPane.add(hBox, 0, 3);
+        Label response = new Label("Welcome<3");
+        response.setStyle(textStyle);
+        gridPane.add(response, 0, 4);
 
         Scene scene = new Scene(gridPane, 500, 500);
         this.stage.setScene(scene);
@@ -90,16 +97,15 @@ public class FormPage{
 
     }
 
-    private void attempt(Text text, String username, String password)
+    private void attempt(Label text, String username, String password)
     {
         text.setText( submitButton(username, password));
-        text.setStyle(textStyle);
         if(text.getText().contains("successful"))
         {
             Button next = new Button("Continue");
             next.setStyle(buttonStyle);
-            gridPane.add(next, 1, 8);
-            next.setOnAction(t -> new MainPage(this.con, this.stage, username));
+            gridPane.add(next, 0, 5);
+            next.setOnAction(t -> new MainPage(this.con, this.stage, username, new Label("")));
         }
 
     }

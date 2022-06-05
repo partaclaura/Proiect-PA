@@ -24,18 +24,20 @@ public class MainPage {
     private ClientConnection con;
     private Stage stage;
     private String username;
+    private Label response;
 
     String buttonStyle = "-fx-font: 20px Verdana;" +
             "-fx-text-fill: #7161ef;" +
             "-fx-border-color: #7161ef;" +
             "-fx-background-color: #11151c";
 
-    public MainPage(ClientConnection con, Stage stage, String username)
+    public MainPage(ClientConnection con, Stage stage, String username, Label response)
     {
         this.con = con;
         this.stage = stage;
         this.username = username;
         this.gridPane = new GridPane();
+        this.response = response;
         pageSetup();
     }
 
@@ -71,6 +73,7 @@ public class MainPage {
         top.getChildren().add(title);
         gridPane.add(top, 0, 1);
 
+        //--MIDDLE--------------------------------------------------------
         GridPane friendList = new GridPane();
         fActions = new HBox(5);
         fActions.setMinWidth(250);
@@ -87,6 +90,7 @@ public class MainPage {
                 "-fx-border-color: #7161ef;" +
                 "-fx-background-color: #11151c");
         fActions.getChildren().add(addFriendButton);
+        //fActions.getChildren().add(response);
 
         this.friendsContainer = new VBox(5);
         friendsContainer.setSpacing(10);
@@ -130,14 +134,12 @@ public class MainPage {
 
     private void addFriendAction(Button button)
     {
-        Label response = new Label("");
         response.setStyle("-fx-text-fill: #efd9ce;" +
                 "-fx-font: 20px Verdana;");
         TextField friendUsername = new TextField("username");
         friendUsername.setStyle("-fx-background-color: #212d40;" +
                 "-fx-text-fill: #efd9ce");
         fActions.getChildren().add(friendUsername);
-        fActions.getChildren().add(response);
         button.setText("Add");
         button.setStyle("-fx-text-fill: #7161ef;" +
                 "-fx-border-color: #7161ef;" +
@@ -149,7 +151,7 @@ public class MainPage {
     private void reload(Label response, TextField friendUsername)
     {
         response.setText(new ServerCom(con).addFriendRequest(this.username, friendUsername.getText()));
-        MainPage mp = new MainPage(this.con, this.stage, this.username);
+        MainPage mp = new MainPage(this.con, this.stage, this.username, response);
     }
 
 }

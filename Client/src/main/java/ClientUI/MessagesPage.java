@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,23 +54,32 @@ public class MessagesPage {
 
         HBox top = new HBox();
         Button back = new Button("BACK");
-        back.setOnAction(t-> new MainPage(this.con, this.stage, this.username));
+        back.setOnAction(t-> new MainPage(this.con, this.stage, this.username, new Label()));
         back.setStyle(buttonStyle);
         top.getChildren().add(back);
+        ScrollPane friendsList = new ScrollPane();
+
+        friendsList.setMaxWidth(300);
+        friendsList.setStyle("");
+        HBox list = new HBox(5);
         for(Label label : friends)
         {
             Button friend = new Button(label.getText());
             friend.setOnAction(t->showMessages(label.getText()));
-            friend.setStyle("-fx-font: 20px Verdana;" +
+            friend.setStyle("-fx-font: 15px Verdana;" +
                     "-fx-text-fill: #7161ef;" +
                     "-fx-border-color: #11151c;" +
                     "-fx-background-color: #11151c");
-            top.getChildren().add(friend);
+            list.getChildren().add(friend);
         }
+        friendsList.setContent(list);
+        top.getChildren().add(friendsList);
         gridPane.add(top, 0, 1);
 
         StackPane stackPane = new StackPane();
-        stackPane.setMinWidth(300);
+        stackPane.setMaxWidth(400);
+        stackPane.setMaxHeight(300);
+        stackPane.setMinWidth(400);
         stackPane.setMinHeight(300);
         scrollPane = new ScrollPane();
         stackPane.getChildren().add(scrollPane);
@@ -87,7 +97,6 @@ public class MessagesPage {
         refresh.setStyle("-fx-background-color: #212d40;" +
                 "-fx-text-fill: #7161ef;");
         TextField textField = new TextField();
-        TextInputControl
         textField.setStyle("-fx-background-color: #212d40;" +
                 "-fx-text-fill: #efd9ce;");
         sendMessageContainer.getChildren().add(textField);
@@ -102,6 +111,9 @@ public class MessagesPage {
 
 
         Scene scene = new Scene(gridPane, 500, 500);
+        File f = new File("file.css");
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
         this.stage.setScene(scene);
 
     }
@@ -125,7 +137,7 @@ public class MessagesPage {
         String[] messages = getMessage().split(";");
         VBox vBox = new VBox(5);
         vBox.setMinHeight(300);
-        vBox.setMinWidth(300);
+        vBox.setMinWidth(400);
         vBox.setPadding(new Insets(25, 25, 25, 25));
         vBox.setStyle("-fx-background-color: #212d40;");
         vBox.setFillWidth(true);
