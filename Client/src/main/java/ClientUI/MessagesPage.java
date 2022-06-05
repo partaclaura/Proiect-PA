@@ -5,18 +5,25 @@ import Connection.ServerCom;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MessagesPage {
     ClientConnection con;
     Stage stage;
     String username;
+    List<Label> friends;
+    ScrollPane scrollPane;
+    String friendToSend = "";
 
     String buttonStyle = "-fx-font: 20px Verdana;" +
             "-fx-text-fill: #7161ef;" +
@@ -27,58 +34,72 @@ public class MessagesPage {
     String fieldStyle = "-fx-background-color: #212d40;" +
             "-fx-text-fill: #efd9ce";
 
-    public MessagesPage(ClientConnection con, Stage stage, String username)
+    public MessagesPage(ClientConnection con, Stage stage, String username, List<Label> friends)
     {
         this.con = con;
         this.stage = stage;
         this.username = username;
+        this.friends = friends;
         setup();
     }
 
     private void setup()
     {
-        HBox sendContainer = new HBox(5);
-        Button back = new Button("Back");
-        back.setStyle(buttonStyle);
-        back.setOnAction(t -> new MainPage(this.con, this.stage, this.username));
-
-        Label from_text = new Label("From: " + this.username);
-        from_text.setStyle(textStyle);
-        Label to_text = new Label("To: ");
-        to_text.setStyle(textStyle);
-        TextField to_field = new TextField();
-        to_field.setStyle(fieldStyle);
-        Label mess_text = new Label("Message");
-        mess_text.setStyle(textStyle);
-        TextField mess_field = new TextField();
-        mess_field.setStyle(fieldStyle);
-
         GridPane gridPane = new GridPane();
         gridPane.setStyle("-fx-background-color: #11151c;");
-        gridPane.add(back, 0, 0);
-        gridPane.add(from_text, 0, 1);
-        sendContainer.getChildren().add(to_text);
-        sendContainer.getChildren().add(to_field);
-        gridPane.add(sendContainer, 0, 2);
-        gridPane.add(mess_text, 0, 3);
-        gridPane.add(mess_field, 0, 4);
-
-        gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
+        HBox top = new HBox();
+        Button back = new Button("BACK");
+        back.setOnAction(t-> new MainPage(this.con, this.stage, this.username));
+        back.setStyle(buttonStyle);
+        top.getChildren().add(back);
+        for(Label label : friends)
+        {
+            Button friend = new Button(label.getText());
+            friend.setOnAction(t->showMessages(label.getText()));
+            friend.setStyle("-fx-font: 20px Verdana;" +
+                    "-fx-text-fill: #7161ef;" +
+                    "-fx-border-color: #11151c;" +
+                    "-fx-background-color: #11151c");
+            top.getChildren().add(friend);
+        }
+        gridPane.add(top, 0, 1);
+
+        StackPane stackPane = new StackPane();
+        stackPane.setMinWidth(300);
+        stackPane.setMinHeight(300);
+        scrollPane = new ScrollPane();
+        stackPane.getChildren().add(scrollPane);
+        scrollPane.setStyle("-fx-background-color: #212d40;");
+        //scrollPane.setPrefSize(300, 300);
+        gridPane.add(stackPane, 0, 2);
+
+        HBox sendMessageContainer = new HBox(5);
+        sendMessageContainer.setStyle("-fx-background-color: #11151c");
+        sendMessageContainer.setPadding(new Insets(25, 25, 25, 25));
+
+        Button refresh = new Button("RELOAD");
+        sendMessageContainer.getChildren().add(refresh);
+        refresh.setOnAction(t->showMessages(this.friendToSend));
+        refresh.setStyle("-fx-background-color: #212d40;" +
+                "-fx-text-fill: #7161ef;");
+        TextField textField = new TextField();
+        TextInputControl
+        textField.setStyle("-fx-background-color: #212d40;" +
+                "-fx-text-fill: #efd9ce;");
+        sendMessageContainer.getChildren().add(textField);
 
         Button send = new Button("SEND");
-        send.setStyle(buttonStyle);
-        gridPane.add(send, 0, 5);
-        send.setOnAction(t-> sendEvent(gridPane, to_field.getText(), mess_field.getText()));
+        send.setOnAction(t->sendEvent(gridPane, this.friendToSend, textField.getText()));
+        send.setStyle("-fx-background-color: #212d40;" +
+                "-fx-text-fill: #7161ef;");
+        sendMessageContainer.getChildren().add(send);
 
-        Button get = new Button("SHOW");
-        get.setStyle(buttonStyle);
-        gridPane.add(get, 1, 5);
+        gridPane.add(sendMessageContainer, 0, 3);
 
-        get.setOnAction(t->getMessage(gridPane));
 
         Scene scene = new Scene(gridPane, 500, 500);
         this.stage.setScene(scene);
@@ -89,17 +110,48 @@ public class MessagesPage {
     {
         Text resp = new Text("");
         resp.setStyle(textStyle);
-        gridPane.add(resp, 2, 5);
         resp.setText(new ServerCom(this.con).sendMessage(this.username, friend, message));
-        gridPane.add(resp, 2, 4);
+        showMessages(this.friendToSend);
     }
 
-    private void getMessage(GridPane gridPane)
+    private String getMessage()
     {
-        Text messages = new Text();
-        messages.setStyle(textStyle);
-        gridPane.add(messages, 0, 6);
-        messages.setText(new ServerCom(this.con).getMessages(this.username));
+        return (new ServerCom(this.con).getMessages(this.username));
+    }
+
+    private void showMessages(String friend)
+    {
+        this.friendToSend = friend;
+        String[] messages = getMessage().split(";");
+        VBox vBox = new VBox(5);
+        vBox.setMinHeight(300);
+        vBox.setMinWidth(300);
+        vBox.setPadding(new Insets(25, 25, 25, 25));
+        vBox.setStyle("-fx-background-color: #212d40;");
+        vBox.setFillWidth(true);
+        scrollPane.setContent(vBox);
+        for(int i = 1;  i < messages.length - 2; i+= 3) {
+            VBox vBox1 = new VBox();
+            if(messages[i].equals(friend) || messages[i + 1].equals(friend))
+            {
+                Label name = new Label(messages[i]);
+                name.setStyle("-fx-text-fill: #efd9ce;");
+                Label message = new Label(messages[i+2]);
+                message.setPadding(new Insets(10, 10, 10, 10));
+                message.setStyle("-fx-text-fill: #efd9ce;" +
+                        "-fx-font: 20px Verdana;" +
+                        "-fx-border-width: 2px;" +
+                        "-fx-border-radius: 10px;" +
+                        "-fx-border-color: #efd9ce");
+                vBox1.getChildren().add(name);
+                vBox1.getChildren().add(message);
+                if(messages[i].equals(username))
+                    vBox1.setAlignment(Pos.TOP_RIGHT);
+                else vBox1.setAlignment(Pos.TOP_LEFT);
+            }
+            vBox.getChildren().add(vBox1);
+        }
+
     }
 
 }

@@ -92,7 +92,7 @@ public class ClientHandler extends Thread{
                     break;
                 case "signup":
                     System.out.println("Client wants to signup");
-                    if(user.getIdByUsername(p[0]) != 0)
+                    if(p.length > 0 && user.getIdByUsername(p[0]) != 0)
                     {
                         dataOutputStream.writeUTF("Username already exists.");
                         System.out.println("Sending");

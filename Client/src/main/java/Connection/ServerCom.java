@@ -18,8 +18,6 @@ public class ServerCom {
             this.con.getDataOutputStream().writeUTF("login " + username + " " + password);
             System.out.println("Sending");
             response = this.con.getDataInputStream().readUTF();
-            while(response.equals("Invalid command.") || !(response.equals("Login successful.") || response.equals("Wrong username or password.")) )
-                response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);
 
         }catch (IOException e)
@@ -36,8 +34,6 @@ public class ServerCom {
             this.con.getDataOutputStream().writeUTF("signup " + username + " " + password);
             System.out.println("Sending");
             response = this.con.getDataInputStream().readUTF();
-            while(!response.equals("Username already exists.") && !response.equals("Signup successful.") && !response.equals("Signup error."))
-                response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);
 
         }catch (IOException e)
@@ -55,8 +51,6 @@ public class ServerCom {
             this.con.getDataOutputStream().writeUTF("getFriends " + username);
             System.out.println("Sending");
             response = this.con.getDataInputStream().readUTF();
-            while(!response.contains(","))
-                response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);
             String[] f = response.split(",");
             friends.addAll(Arrays.asList(f));
@@ -75,8 +69,6 @@ public class ServerCom {
             System.out.println("Sending");
             this.con.getDataOutputStream().flush();
             response = this.con.getDataInputStream().readUTF();
-            while(!(response.equals("Friendship successful") || response.equals("User does not exist/ already friends")))
-                response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);
         }catch (IOException e)
         {
@@ -94,8 +86,6 @@ public class ServerCom {
             System.out.println("Sending " + tosend);
             this.con.getDataOutputStream().flush();
             response = this.con.getDataInputStream().readUTF();
-            while(!(response.equals("Message sent")))
-                response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);
         }catch (IOException e)
         {

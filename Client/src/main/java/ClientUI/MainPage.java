@@ -36,28 +36,37 @@ public class MainPage {
         this.stage = stage;
         this.username = username;
         this.gridPane = new GridPane();
-        gridPane.setStyle("-fx-background-color: #11151c");
         pageSetup();
     }
 
     private void pageSetup()
     {
-        gridPane.setAlignment(Pos.CENTER);
+        //--MAIN CONTAINER-------------------------------------------
+        //gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(25, 25, 25, 25));
+        //gridPane.setPadding(new Insets(25, 25, 25, 25));
+        gridPane.setMinWidth(500);
+        gridPane.setMaxWidth(500);
+        gridPane.setMinHeight(500);
+        gridPane.setMaxHeight(500);
+        gridPane.setStyle("-fx-background-color: #11151c");
 
+        //--TOP CONTAINER--------------------------------------------
+        VBox top = new VBox(5);
+        top.setSpacing(50);
+        top.setMinWidth(500);
+        top.setMaxWidth(500);
+        top.setStyle("-fx-background-color: #212d40");
+        //top.setPadding(new Insets(10, 10, 10, 10));
         Button back = new Button("Back");
         back.setStyle(buttonStyle);
         back.setOnAction(t -> new TitlePage(this.stage, this.con));
         Label title = new Label(this.username);
+        title.setPadding(new Insets(10, 10, 10, 10));
         title.setStyle("-fx-font: 30px Verdana;" +
-                "-fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #7161ef 0%, #dec0f1 50%);");
-        HBox top = new HBox(5);
-        top.setSpacing(10);
-        top.setMinWidth(400);
-        top.setMaxWidth(400);
-        top.setPadding(new Insets(10, 10, 10, 10));
+                "-fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #7161ef 0%, #dec0f1 50%);" +
+                "-fx-background-color: #11151c");
         top.getChildren().add(back);
         top.getChildren().add(title);
         gridPane.add(top, 0, 1);
@@ -97,7 +106,7 @@ public class MainPage {
         Button messages = new Button("Messages");
         gridPane.add(messages, 0, 3);
         messages.setStyle(buttonStyle);
-        messages.setOnAction(t-> new MessagesPage(this.con, this.stage, this.username));
+        messages.setOnAction(t-> new MessagesPage(this.con, this.stage, this.username, showFriends()));
 
 
 

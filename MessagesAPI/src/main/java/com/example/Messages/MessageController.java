@@ -19,9 +19,9 @@ public class MessageController {
         for(Message m : messages)
         {
             if(m.getUsername2().equals(username) || m.getUsername1().equals(username))
-                response = response.concat(";" + "From: " +
-                        m.getUsername1() + "\nTo: " +
-                        m.getUsername2() + "\nM: " +
+                response = response.concat(";" +
+                        m.getUsername1() + ";" +
+                        m.getUsername2() + ";" +
                         m.getMessage());
         }
         return response;
@@ -31,7 +31,11 @@ public class MessageController {
     public void createMessage(@RequestBody String mes)
     {
         String[] ar = mes.split(",");
-        Message message = new Message(1, ar[0], ar[1], ar[2]);
+        List<Message> messages = messageRepository.findAll();
+        int index = 0;
+        for(Message message : messages)
+            index++;
+        Message message = new Message(index + 1, ar[0], ar[1], ar[2]);
         messageRepository.save(message);
 
     }
