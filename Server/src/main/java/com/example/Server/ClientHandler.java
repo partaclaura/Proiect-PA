@@ -152,8 +152,8 @@ public class ClientHandler extends Thread{
                     else dataOutputStream.writeUTF("error");
                     break;
                 case "send":
-                    System.out.println("From " + p[0] + " to " + p[1] + ": " + p[2]);
-                    if(p.length == 3) {
+                    System.out.println(p.length);
+                    if(p.length > 2) {
                         String tosend = p[0] + "," + p[1] + "," + p[2];
                         APIConnection.PostMessage(tosend);
                         dataOutputStream.writeUTF("Message sent");
