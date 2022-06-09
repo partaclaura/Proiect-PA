@@ -11,18 +11,23 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
+
+/**
+ * The class responsible for the Login/ Signup page.
+ * It consists of a method which creates the UI and the functions
+ * that will communicate with the classes responsible with the connection
+ * to the server.
+ */
+
 public class FormPage{
-    private ClientConnection con;
-    private Stage stage;
-    private Label pageTitle;
-    private GridPane gridPane;
-    String buttonStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #7161ef;" +
-            "-fx-border-color: #7161ef;" +
-            "-fx-background-color: #11151c";
+    private final ClientConnection con;
+    private final Stage stage;
+    private final Label pageTitle;
+    private final GridPane gridPane;
+
     String textStyle = "-fx-font: 20px Verdana;" +
             "-fx-text-fill: #efd9ce";
 
@@ -46,15 +51,16 @@ public class FormPage{
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
+        //the top
         Button back = new Button("BACK");
-        back.setStyle(buttonStyle);
         back.setOnAction(t -> new TitlePage(this.stage, this.con));
-        //setting labels and fields
+
         HBox controls = new HBox(5);
         controls.getChildren().add(back);
         controls.getChildren().add(this.pageTitle);
         gridPane.add(controls, 0, 0, 2, 1);
 
+        //the middle -> text fields for providing username and password
         HBox usernameContainer = new HBox(5);
         Label userName = new Label("username: ");
         gridPane.add(userName, 0, 1);
@@ -82,41 +88,59 @@ public class FormPage{
 
         //button
         Button button = new Button(this.pageTitle.getText());
-        button.setStyle(buttonStyle);
         HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.BOTTOM_LEFT);
         hBox.getChildren().add(button);
         gridPane.add(hBox, 0, 3);
-        Label response = new Label("Welcome<3");
+        Label response = new Label("Welcome!");
         response.setStyle(textStyle);
         gridPane.add(response, 0, 4);
 
+        //importing style
         Scene scene = new Scene(gridPane, 500, 500);
+        File f = new File("file.css");
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+
+        //adding the scene to the stage
         this.stage.setScene(scene);
         button.setOnAction(t -> attempt(response, userNameField.getText(), passwordField.getText()));
 
     }
 
+    /**
+     * This method is used to give permission to the user to proceed to his account page
+     * if the login process was successful.
+     * @param text The container where the response from the server will be displayed.
+     * @param username The username given by the user.
+     * @param password The password given by the user.
+     */
     private void attempt(Label text, String username, String password)
     {
         text.setText( submitButton(username, password));
         if(text.getText().contains("successful"))
         {
             Button next = new Button("Continue");
-            next.setStyle(buttonStyle);
             gridPane.add(next, 0, 5);
             next.setOnAction(t -> new MainPage(this.con, this.stage, username, new Label("")));
         }
 
     }
 
+    /**
+     * This method is used to send the username and password provided by the user
+     * to the server by invoking the corresponding methods from the ServerCom class.
+     * @param username The username provided by the user.
+     * @param password The password provided by the user.
+     * @return The response from the server.
+     */
     private String submitButton(String username, String password)
     {
         if(this.pageTitle.getText().equals("Login"))
             return new ServerCom(this.con).sendLoginRequest(username, password);
         if(this.pageTitle.getText().equals("Signup"))
             return new ServerCom(this.con).sendSignupRequest(username, password);
-        return "";
+        return "Error";
     }
 
 

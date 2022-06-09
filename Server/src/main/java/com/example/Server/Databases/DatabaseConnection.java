@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * The class that will create a connection to the database.
+ * Implements the Singleton DP.
+ */
 public class DatabaseConnection {
     private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521/xe";
     private static final String DB_USERNAME = "LAURA";
@@ -30,7 +34,7 @@ public class DatabaseConnection {
         }
     }
 
-    public static void closeConnection()
+    /*public static void closeConnection()
     {
         try{
             connection.close();
@@ -38,5 +42,5 @@ public class DatabaseConnection {
         {
             e.printStackTrace();
         }
-    }
+    }*/
 }

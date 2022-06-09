@@ -1,4 +1,6 @@
-package com.example.Server;
+package com.example.Server.Connection;
+
+import com.example.Server.Connection.ClientHandler;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,6 +8,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * The class that will open the server and receive new
+ * clients and for each of them will start a new thread
+ * that will handle the communication.
+ */
 public class ServerConnection {
     public ServerConnection(int port) {
         try {

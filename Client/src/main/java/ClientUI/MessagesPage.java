@@ -18,6 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The class responsible for the user's messages page.
+ * It consists of a method which creates the UI and the functions
+ * that will communicate with the classes responsible with the connection
+ * to the server.
+ */
 public class MessagesPage {
     ClientConnection con;
     Stage stage;
@@ -26,13 +32,11 @@ public class MessagesPage {
     ScrollPane scrollPane;
     String friendToSend = "";
 
-    String buttonStyle = "-fx-font: 20px Verdana;" +
+    String buttonStyle = "-fx-background-color: #212d40;" +
             "-fx-text-fill: #7161ef;" +
-            "-fx-border-color: #7161ef;" +
-            "-fx-background-color: #11151c";
+            "-fx-border-color: #212d40;" +
+            "-fx-font: 13px Verdana;";
     String textStyle = "-fx-font: 20px Verdana;" +
-            "-fx-text-fill: #efd9ce";
-    String fieldStyle = "-fx-background-color: #212d40;" +
             "-fx-text-fill: #efd9ce";
 
     public MessagesPage(ClientConnection con, Stage stage, String username, List<Label> friends)
@@ -44,23 +48,34 @@ public class MessagesPage {
         setup();
     }
 
+    /**
+     * This method is used to create the UI of the page which displays a list of
+     * the user's friends. When the user picks a friend from the list, the messages
+     * between the two will be displayed.
+     * The user is also provided with a reload button, a text field to send a new
+     * message to the selected friend and a send button for this action.
+     */
     private void setup()
     {
+        //the main container and stage
         GridPane gridPane = new GridPane();
+        Scene scene = new Scene(gridPane, 500, 500);
+        File f = new File("file.css");
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
         gridPane.setStyle("-fx-background-color: #11151c;");
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
 
+        //the top container
         HBox top = new HBox();
         Button back = new Button("BACK");
         back.setOnAction(t-> new MainPage(this.con, this.stage, this.username, new Label()));
-        back.setStyle(buttonStyle);
         top.getChildren().add(back);
-        ScrollPane friendsList = new ScrollPane();
-
+        ScrollPane friendsList = new ScrollPane(); //the friend list
+        //adding the friends to the container
         friendsList.setMaxWidth(300);
-        friendsList.setStyle("");
         HBox list = new HBox(5);
         for(Label label : friends)
         {
@@ -91,11 +106,11 @@ public class MessagesPage {
         sendMessageContainer.setStyle("-fx-background-color: #11151c");
         sendMessageContainer.setPadding(new Insets(25, 25, 25, 25));
 
+        //the bottom container -> the reload/send button and message text field
         Button refresh = new Button("RELOAD");
         sendMessageContainer.getChildren().add(refresh);
         refresh.setOnAction(t->showMessages(this.friendToSend));
-        refresh.setStyle("-fx-background-color: #212d40;" +
-                "-fx-text-fill: #7161ef;");
+        refresh.setStyle(buttonStyle);
         TextField textField = new TextField();
         textField.setStyle("-fx-background-color: #212d40;" +
                 "-fx-text-fill: #efd9ce;");
@@ -103,21 +118,22 @@ public class MessagesPage {
 
         Button send = new Button("SEND");
         send.setOnAction(t->sendEvent(gridPane, this.friendToSend, textField.getText()));
-        send.setStyle("-fx-background-color: #212d40;" +
-                "-fx-text-fill: #7161ef;");
+        send.setStyle(buttonStyle);
         sendMessageContainer.getChildren().add(send);
 
         gridPane.add(sendMessageContainer, 0, 3);
 
-
-        Scene scene = new Scene(gridPane, 500, 500);
-        File f = new File("file.css");
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
         this.stage.setScene(scene);
 
     }
 
+    /**
+     * The method responsible with the action of sending a message to a
+     * selected friend.
+     * @param gridPane The main container.
+     * @param friend The friend currently selected.
+     * @param message The message to be sent, extracted from the text field.
+     */
     private void sendEvent(GridPane gridPane, String friend, String message)
     {
         Text resp = new Text("");
@@ -126,11 +142,20 @@ public class MessagesPage {
         showMessages(this.friendToSend);
     }
 
+    /**
+     * This function is used to get the friend list from the server.
+     * @return The response from the server.
+     */
     private String getMessage()
     {
         return (new ServerCom(this.con).getMessages(this.username));
     }
 
+    /**
+     * This method is used to create the part of the page that displays the
+     * messages between the user and the selected friend.
+     * @param friend The friend selected by the user.
+     */
     private void showMessages(String friend)
     {
         this.friendToSend = friend;

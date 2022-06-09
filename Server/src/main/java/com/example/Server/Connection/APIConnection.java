@@ -1,4 +1,4 @@
-package com.example.Server;
+package com.example.Server.Connection;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,8 +26,7 @@ public class APIConnection {
         Map<String, String> params = new HashMap<>();
         params.put("username", m);
         RestTemplate restTemplate = new RestTemplate();
-        String r = restTemplate.getForObject(URL_GET_UMESS, String.class, params);
-        return r;
+        return restTemplate.getForObject(URL_GET_UMESS, String.class, params);
     }
 
 }

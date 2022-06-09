@@ -5,6 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * The class responsible with the action of creating the TCP connection
+ * between the client and the server.
+ */
 public class ClientConnection {
     public Socket socket;
     DataInputStream dataInputStream;
@@ -20,10 +24,6 @@ public class ClientConnection {
         {
             e.printStackTrace();
         }
-    }
-
-    public Socket getSocket() {
-        return socket;
     }
 
     public DataInputStream getDataInputStream() {
