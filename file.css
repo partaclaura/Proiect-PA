@@ -1,3 +1,12 @@
+
+
+.button {
+    -fx-font: 20px Verdana;
+    -fx-text-fill: #7161ef;
+    -fx-border-color: #7161ef;
+    -fx-background-color: #11151c;
+}
+
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track{
     -fx-background-color :#11151c;

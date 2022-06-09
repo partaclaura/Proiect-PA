@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ServerCom {
-    private ClientConnection con;
+    private final ClientConnection con;
     public ServerCom(ClientConnection con)
     {
         this.con = con;
@@ -79,11 +79,11 @@ public class ServerCom {
 
     public String sendMessage(String from, String to, String message)
     {
-        String tosend = from + " " + to + " " + message;
+        String toSend = from + " " + to + " " + message;
         String response = "";
         try {
-            this.con.getDataOutputStream().writeUTF("send "+tosend);
-            System.out.println("Sending " + tosend);
+            this.con.getDataOutputStream().writeUTF("send " + toSend);
+            System.out.println("Sending " + toSend);
             this.con.getDataOutputStream().flush();
             response = this.con.getDataInputStream().readUTF();
             System.out.println("Got " + response);

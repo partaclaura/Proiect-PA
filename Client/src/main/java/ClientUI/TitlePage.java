@@ -10,11 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+/**
+ * The class which creates the first page of the application.
+ */
 public class TitlePage {
     ClientConnection con;
     Stage stage;
-    Text pageTitle = new Text("PROIECT PA");
+    Text pageTitle = new Text("PROJECT PA");
     Button logIn_button = new Button("LOGIN");
     Button signup_button = new Button("SIGNUP");
     VBox vBox = new VBox();
@@ -41,7 +43,7 @@ public class TitlePage {
         //border pane settings
         BorderPane.setAlignment(hBox, Pos.CENTER);
         BorderPane.setAlignment(vBox, Pos.CENTER);
-        //hbox
+        //HBox
         hBox.getChildren().add(pageTitle);
         hBox.setAlignment(Pos.CENTER);
         hBox.setStyle("-fx-background-color: #11151c;");
